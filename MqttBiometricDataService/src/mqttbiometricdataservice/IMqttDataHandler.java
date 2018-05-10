@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package be.vives.oop.mqtt.chatservice;
+package mqttbiometricdataservice;
 
 /**
  *
- * @author nicod
+ * @author jensv
  */
-public interface IMqttMessageHandler {
-    public void messageArrived(String channel, String message);
+
+public interface IMqttDataHandler {
+    public void dataArrived(String channel, String data);
 }
+

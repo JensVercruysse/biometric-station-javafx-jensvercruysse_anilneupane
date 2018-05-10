@@ -1,4 +1,4 @@
-package be.vives.oop.mqtt.chatservice;
+package mqttbiometricdataservice;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -11,20 +11,20 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class MqttChatService implements MqttCallback {
+public class MqttBiometricDataService implements MqttCallback {
     private MqttClient client;
     private String broker = "tcp://labict.be:1883";
     private String clientId;
     private int qos = 2;            // Exactly once
     private MemoryPersistence persistence;
     private MqttConnectOptions connectionOptions;
-    private IMqttMessageHandler messageHandler = null;
+    private IMqttDataHandler dataHandler = null;
     
     private final String BASE_TOPIC = "java/mqttchat";
     private String channelName;
     private String channelTopic;
     
-    public MqttChatService(String clientId, String channelName) {
+    public MqttBiometricDataService(String clientId, String channelName) {
         Random random = new Random();
         this.clientId = clientId + random.nextInt();
         this.channelName = channelName;
@@ -32,7 +32,7 @@ public class MqttChatService implements MqttCallback {
         setupMqtt();
     }
     
-    public MqttChatService() {
+    public MqttBiometricDataService() {
         this("guest", "general");
     }
     
@@ -63,22 +63,22 @@ public class MqttChatService implements MqttCallback {
             this.channelTopic = BASE_TOPIC + "/" + this.channelName;
             client.subscribe(channelTopic);
         } catch (MqttException ex) {
-            Logger.getLogger(MqttChatService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MqttBiometricDataService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void sendMessage(String message) {
+    public void sendData(String data) {
         try {
-            MqttMessage mqttMessage = new MqttMessage(message.getBytes());
+            MqttMessage mqttMessage = new MqttMessage(data.getBytes());
             mqttMessage.setQos(qos);
             client.publish(channelTopic, mqttMessage);
         } catch (MqttException ex) {
-            Logger.getLogger(MqttChatService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MqttBiometricDataService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void setMessageHandler(IMqttMessageHandler handler) {
-        this.messageHandler = handler;
+    public void setDataHandler(IMqttDataHandler handler) {
+        this.dataHandler = handler;
     }
     
     public void disconnect() {
@@ -86,7 +86,7 @@ public class MqttChatService implements MqttCallback {
             client.disconnect();
             client.close();
         } catch (MqttException ex) {
-            Logger.getLogger(MqttChatService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MqttBiometricDataService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -97,8 +97,8 @@ public class MqttChatService implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage mm) throws Exception {
-        if (messageHandler != null) {
-            messageHandler.messageArrived(channelName, mm.toString());
+        if (dataHandler != null) {
+            dataHandler.dataArrived(channelName, mm.toString());
         }
     }
 

@@ -5,8 +5,7 @@
  */
 package projectwerkfxml;
 
-import be.vives.oop.mqtt.chatservice.IMqttMessageHandler;
-import be.vives.oop.mqtt.chatservice.MqttChatService;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -15,23 +14,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import mqttbiometricdataservice.IMqttDataHandler;
+import mqttbiometricdataservice.MqttBiometricDataService;
 
 /**
  *
  * @author jensv
  */
-public class ProjectwerkFXMLController implements Initializable, IMqttMessageHandler {
+public class ProjectwerkFXMLController implements Initializable, IMqttDataHandler {
     
     @FXML
     private Label heartbeat;
     @FXML
     private Button start;
    
-    private MqttChatService jens_heartbeat;
-    private MqttChatService jens_temperature;
-    private MqttChatService jens_x_value;
-    private MqttChatService jens_y_value;
-    private MqttChatService jens_z_value;
+    private MqttBiometricDataService jens_heartbeat;
+    private MqttBiometricDataService jens_temperature;
+    private MqttBiometricDataService jens_x_value;
+    private MqttBiometricDataService jens_y_value;
+    private MqttBiometricDataService jens_z_value;
         
     @FXML
     private void handleStart(ActionEvent event) {
@@ -40,23 +41,23 @@ public class ProjectwerkFXMLController implements Initializable, IMqttMessageHan
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        jens_heartbeat = new MqttChatService("jens", "jens_heartbeat");
-        jens_heartbeat.setMessageHandler(this);
-        jens_temperature = new MqttChatService("jens", "jens_temperature");
-        jens_temperature.setMessageHandler(this);
-        jens_x_value = new MqttChatService("jens", "jens_x_value");
-        jens_x_value.setMessageHandler(this);
-        jens_y_value = new MqttChatService("jens", "jens_y_value");
-        jens_y_value.setMessageHandler(this);
-        jens_z_value = new MqttChatService("jens", "jens_z_value");
-        jens_z_value.setMessageHandler(this);
+        jens_heartbeat = new MqttBiometricDataService("jens", "jens_heartbeat");
+        jens_heartbeat.setDataHandler(this);
+        jens_temperature = new MqttBiometricDataService("jens", "jens_temperature");
+        jens_temperature.setDataHandler(this);
+        jens_x_value = new MqttBiometricDataService("jens", "jens_x_value");
+        jens_x_value.setDataHandler(this);
+        jens_y_value = new MqttBiometricDataService("jens", "jens_y_value");
+        jens_y_value.setDataHandler(this);
+        jens_z_value = new MqttBiometricDataService("jens", "jens_z_value");
+        jens_z_value.setDataHandler(this);
         disconnectClientOnClose();
     }    
     
     @Override
-    public void messageArrived(String channel, String message) {
-    System.out.println("Received chat messages (on channel = " + channel + "): " + message);  
-    //heartbeat.setText(message);
+    public void dataArrived(String channel, String data) {
+    System.out.println("Received data (on channel = " + channel + "): " + data);  
+    //heartbeat.setText(data);
     }    
     
     private void disconnectClientOnClose() {
