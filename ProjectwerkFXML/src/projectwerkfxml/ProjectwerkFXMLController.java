@@ -9,6 +9,7 @@ import be.vives.oop.mqtt.chatservice.IMqttMessageHandler;
 import be.vives.oop.mqtt.chatservice.MqttChatService;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,7 +40,7 @@ public class ProjectwerkFXMLController implements Initializable, IMqttMessageHan
     }
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         jens_heartbeat = new MqttChatService("jens", "jens_heartbeat");
         jens_heartbeat.setMessageHandler(this);
         jens_temperature = new MqttChatService("jens", "jens_temperature");
@@ -55,8 +56,16 @@ public class ProjectwerkFXMLController implements Initializable, IMqttMessageHan
     
     @Override
     public void messageArrived(String channel, String message) {
-    System.out.println("Received chat messages (on channel = " + channel + "): " + message);  
-    //heartbeat.setText(message);
+        System.out.println("Received chat messages (on channel = " + channel + "): " + message);  
+        
+        // Om van die cross-thread error af te komen heb je onderstaand stukje code nodig.
+        // Gevonden op stack-overflow https://stackoverflow.com/questions/11690683/javafx-update-ui-from-another-thread
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+              //Update UI here     
+              heartbeat.setText(message);
+            }
+        });
     }    
     
     private void disconnectClientOnClose() {
@@ -69,6 +78,8 @@ public class ProjectwerkFXMLController implements Initializable, IMqttMessageHan
                         // stage is set. now is the right time to do whatever we need to the stage in the controller.
                         ((Stage) newWindow).setOnCloseRequest((event) -> {
                             jens_heartbeat.disconnect();
+                            
+                            // Hier moet je ook je andere services disconnecten !!!!
                         });
                     }
                 });
