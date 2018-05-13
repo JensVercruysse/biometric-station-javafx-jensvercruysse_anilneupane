@@ -45,11 +45,11 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         jens_heartbeat.setDataHandler(this);
         jens_temperature = new MqttBiometricDataService("jens", "temperature");
         jens_temperature.setDataHandler(this);
-        jens_x_value = new MqttBiometricDataService("jens", "acc_x_value");
+        jens_x_value = new MqttBiometricDataService("jens", "accelero_x_value");
         jens_x_value.setDataHandler(this);
-        jens_y_value = new MqttBiometricDataService("jens", "acc_y_value");
+        jens_y_value = new MqttBiometricDataService("jens", "accelero_y_value");
         jens_y_value.setDataHandler(this);
-        jens_z_value = new MqttBiometricDataService("jens", "acc_z_value");
+        jens_z_value = new MqttBiometricDataService("jens", "accelero_z_value");
         jens_z_value.setDataHandler(this);
         disconnectClientOnClose();
     }
