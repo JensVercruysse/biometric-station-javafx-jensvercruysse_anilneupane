@@ -13,7 +13,7 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <LineChart layoutX="367.0" layoutY="14.0" prefHeight="269.0" prefWidth="406.0" title="Heartbeat">
+      <LineChart fx:id="heartbeatChart" layoutX="367.0" layoutY="3.0" prefHeight="269.0" prefWidth="406.0">
         <xAxis>
           <NumberAxis side="BOTTOM" />
         </xAxis>
@@ -21,7 +21,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart layoutX="367.0" layoutY="296.0" prefHeight="269.0" prefWidth="406.0" title="Temperature">
+      <LineChart fx:id="temperatureChart" layoutX="367.0" layoutY="273.0" prefHeight="269.0" prefWidth="406.0">
          <xAxis>
             <NumberAxis side="BOTTOM" />
          </xAxis>
@@ -54,12 +54,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="148.0" layoutY="124.0" text="00,00">
+      <Label fx:id="temperature" layoutX="148.0" layoutY="124.0" text="00,00">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="148.0" layoutY="175.0" text="[000|000|000]">
+      <Label fx:id="acceleroAll" layoutX="148.0" layoutY="175.0" text="[ 000 | 000 | 000]">
          <font>
             <Font size="18.0" />
          </font>
@@ -84,17 +84,17 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="180.0" layoutY="350.0" text="000">
+      <Label fx:id="acceleroX" layoutX="180.0" layoutY="350.0" text="000">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="180.0" layoutY="394.0" text="000">
+      <Label fx:id="acceleroY" layoutX="180.0" layoutY="394.0" text="000">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="180.0" layoutY="437.0" text="000">
+      <Label fx:id="acceleroZ" layoutX="180.0" layoutY="437.0" text="000">
          <font>
             <Font size="18.0" />
          </font>
