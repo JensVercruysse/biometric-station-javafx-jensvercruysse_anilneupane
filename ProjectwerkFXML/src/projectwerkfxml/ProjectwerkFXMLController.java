@@ -66,6 +66,8 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
 
     private final int NUMBER_OF_HEARTBEAT_SERIES = 1;
     private final int NUMBER_OF_TEMPERATURE_SERIES = 1;
+    
+    private boolean checkStarted = false;
 
     private XYChart.Series createXYSeries(String name) {
         XYChart.Series series = new XYChart.Series();
@@ -76,12 +78,11 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
     @FXML
     private void handleStart(ActionEvent event) {
         System.out.println("Starting biometric station.");
-        showValues();
+        checkStarted = true;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        hideValues();
 
         heartbeatValues = new XYChart.Series[NUMBER_OF_HEARTBEAT_SERIES];
         heartbeatValues[0] = createXYSeries("Heartbeat");
@@ -107,46 +108,28 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         disconnectClientOnClose();
     }
 
-    private void hideValues() {
-        heartbeat.setVisible(false);
-        temperature.setVisible(false);
-        acceleroAll.setVisible(false);
-        acceleroX.setVisible(false);
-        acceleroY.setVisible(false);
-        acceleroZ.setVisible(false);
-    }
-
-    private void showValues() {
-        heartbeat.setVisible(true);
-        temperature.setVisible(true);
-        acceleroAll.setVisible(true);
-        acceleroX.setVisible(true);
-        acceleroY.setVisible(true);
-        acceleroZ.setVisible(true);
-    }
-
     @Override
     public void dataArrived(String channel, String data) {
         System.out.println("Received data on channel " + channel + ": " + data);
 
-        if (channel.equals("heartbeat")) {
+        if (channel.equals("heartbeat") && checkStarted) {
             heartbeatDataAsString = data;
             heartbeatDataAsInt = Integer.parseInt(data);
             runHeartbeat();
-        } else if (channel.equals("temperature")) {
+        } else if (channel.equals("temperature") && checkStarted) {
             temperatureDataAsString = data;
             temperatureDataAsDouble = Double.parseDouble(data);
             runTemperature();
-        } else if (channel.equals("accelero_x_value")) {
+        } else if (channel.equals("accelero_x_value") && checkStarted) {
             accelero_x_value = data;
             runAcceleroX();
-        } else if (channel.equals("accelero_y_value")) {
+        } else if (channel.equals("accelero_y_value") && checkStarted) {
             accelero_y_value = data;
             runAcceleroY();
-        } else if (channel.equals("accelero_z_value")) {
+        } else if (channel.equals("accelero_z_value") && checkStarted) {
             accelero_z_value = data;
             runAcceleroZ();
-        }
+        } System.out.println("Biometric station is not ready to print data yet.");
     }
 
     private void runHeartbeat() {
