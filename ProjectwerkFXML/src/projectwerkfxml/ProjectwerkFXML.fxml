@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="555.0" prefWidth="787.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectwerkfxml.ProjectwerkFXMLController">
+<AnchorPane id="AnchorPane" prefHeight="555.0" prefWidth="787.0" style="-fx-background-color: #F0F8FF;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectwerkfxml.ProjectwerkFXMLController">
     <children>
         <Button fx:id="start" layoutX="14.0" layoutY="492.0" onAction="#handleStart" prefHeight="46.0" prefWidth="362.0" text="Start">
          <font>
@@ -15,7 +15,7 @@
          </font></Button>
       <LineChart fx:id="heartbeatChart" layoutX="367.0" layoutY="3.0" prefHeight="269.0" prefWidth="406.0">
         <xAxis>
-          <NumberAxis side="BOTTOM" fx:id="xAxisHeartbeat"/>
+          <NumberAxis side="BOTTOM" fx:id="xAxisHeartbeat" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />
@@ -23,7 +23,7 @@
       </LineChart>
       <LineChart fx:id="temperatureChart" layoutX="367.0" layoutY="273.0" prefHeight="269.0" prefWidth="406.0">
          <xAxis>
-            <NumberAxis side="BOTTOM" fx:id="xAxisTemperature"/>
+            <NumberAxis side="BOTTOM" fx:id="xAxisTemperature" />
          </xAxis>
          <yAxis>
             <NumberAxis side="LEFT" />

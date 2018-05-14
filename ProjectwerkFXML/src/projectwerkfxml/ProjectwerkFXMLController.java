@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import mqttbiometricdataservice.IMqttDataHandler;
 import mqttbiometricdataservice.MqttBiometricDataService;
 
+
 /**
  *
  * @author jensv
@@ -148,16 +149,20 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
             accelero_z_value = data;
             runAcceleroZ();
         }
-        System.out.println("Biometric station is not ready to print data yet.");
     }
 
     private void runHeartbeat() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                //Update UI here     
+                //BPM between 60 and 100 is a healty heartbeat, anything lower of higher will be marked red
+                if (heartbeatDataAsInt > 60 && heartbeatDataAsInt < 100){
+                    heartbeat.setText(heartbeatDataAsString);
+                    heartbeat.setStyle("-fx-background-color: transparent;");
+                } else { heartbeat.setStyle("-fx-background-color: red;");
                 heartbeat.setText(heartbeatDataAsString);
-                
+            }
+
                 if (heartbeat_x_value > 10) {
                     heartbeatValues[0].getData().remove(0);
                 }
@@ -173,8 +178,18 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                //Update UI here     
-                temperature.setText(temperatureDataAsString);
+                //If temperature goes below 0 it's marked blue if temperature goes above 35 it's marked red 
+                if (temperatureDataAsDouble < 0){
+                    temperature.setText(temperatureDataAsString);
+                    temperature.setStyle("-fx-background-color: lightblue;");
+                } else if(temperatureDataAsDouble > 35){
+                    temperature.setText(temperatureDataAsString);
+                    temperature.setStyle("-fx-background-color: red;");
+                } else {
+                    temperature.setText(temperatureDataAsString);
+                    temperature.setStyle("-fx-background-color: transparant;");
+                }
+                
 
                 if (temperature_x_value > 10) {
                     temperatureValues[0].getData().remove(0);
