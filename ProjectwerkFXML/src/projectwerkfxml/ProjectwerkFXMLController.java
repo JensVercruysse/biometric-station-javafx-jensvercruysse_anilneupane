@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -43,6 +44,10 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
     private LineChart heartbeatChart;
     @FXML
     private LineChart temperatureChart;
+    @FXML
+    private NumberAxis xAxisHeartbeat;
+    @FXML
+    private NumberAxis xAxisTemperature;
 
     private int heartbeat_x_value = 0;
     private int temperature_x_value = 0;
@@ -66,8 +71,11 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
 
     private final int NUMBER_OF_HEARTBEAT_SERIES = 1;
     private final int NUMBER_OF_TEMPERATURE_SERIES = 1;
-    
+
     private boolean checkStarted = false;
+
+    private int NumberOfHeartbeatValuesDisplayed[] = new int[10];
+    private double NumberOfTemperatureValuesDisplayed[] = new double[10];
 
     private XYChart.Series createXYSeries(String name) {
         XYChart.Series series = new XYChart.Series();
@@ -93,6 +101,16 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         temperatureValues[0] = createXYSeries("Temperature");
         temperatureChart.getData().add(temperatureValues[0]);
         temperatureChart.getYAxis().setLabel("Temperature [Celcius]");
+
+        xAxisHeartbeat.setAutoRanging(false);
+        xAxisHeartbeat.setLowerBound(heartbeat_x_value);
+        xAxisHeartbeat.setUpperBound(heartbeat_x_value);
+        xAxisHeartbeat.setTickUnit(1);
+
+        xAxisTemperature.setAutoRanging(false);
+        xAxisTemperature.setLowerBound(temperature_x_value);
+        xAxisTemperature.setUpperBound(temperature_x_value);
+        xAxisTemperature.setTickUnit(1);
 
         jens_heartbeat = new MqttBiometricDataService("jens", "heartbeat");
         jens_heartbeat.setDataHandler(this);
@@ -129,7 +147,8 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         } else if (channel.equals("accelero_z_value") && checkStarted) {
             accelero_z_value = data;
             runAcceleroZ();
-        } System.out.println("Biometric station is not ready to print data yet.");
+        }
+        System.out.println("Biometric station is not ready to print data yet.");
     }
 
     private void runHeartbeat() {
@@ -138,52 +157,69 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
             public void run() {
                 //Update UI here     
                 heartbeat.setText(heartbeatDataAsString);
+                
+                if (heartbeat_x_value > 10) {
+                    heartbeatValues[0].getData().remove(0);
+                }
                 heartbeatValues[0].getData().add(new XYChart.Data(heartbeat_x_value, heartbeatDataAsInt));
+                xAxisHeartbeat.setLowerBound(heartbeat_x_value - 10);
+                xAxisHeartbeat.setUpperBound(heartbeat_x_value);
                 heartbeat_x_value++;
             }
         });
     }
-    private void runTemperature(){
+
+    private void runTemperature() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 //Update UI here     
-            temperature.setText(temperatureDataAsString);
-            temperatureValues[0].getData().add(new XYChart.Data(temperature_x_value, temperatureDataAsDouble));
-            temperature_x_value++;
+                temperature.setText(temperatureDataAsString);
+
+                if (temperature_x_value > 10) {
+                    temperatureValues[0].getData().remove(0);
+                }
+                temperatureValues[0].getData().add(new XYChart.Data(temperature_x_value, temperatureDataAsDouble));
+                xAxisTemperature.setLowerBound(temperature_x_value - 10);
+                xAxisTemperature.setUpperBound(temperature_x_value);
+                temperature_x_value++;
             }
-        });       
+        });
     }
-    private void runAcceleroX(){
+
+    private void runAcceleroX() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 //Update UI here     
-            acceleroX.setText(accelero_x_value);
-            acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
+                acceleroX.setText(accelero_x_value);
+                acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
             }
-        });       
+        });
     }
-    private void runAcceleroY(){
+
+    private void runAcceleroY() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 //Update UI here     
-            acceleroY.setText(accelero_y_value);
-            acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
+                acceleroY.setText(accelero_y_value);
+                acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
             }
-        });       
+        });
     }
-    private void runAcceleroZ(){
+
+    private void runAcceleroZ() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 //Update UI here     
-            acceleroZ.setText(accelero_z_value);
-            acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
+                acceleroZ.setText(accelero_z_value);
+                acceleroAll.setText("[ " + accelero_x_value + " | " + accelero_y_value + " | " + accelero_z_value + " ]");
             }
-        });       
-    }    
+        });
+    }
+
     private void disconnectClientOnClose() {
         // Source: https://stackoverflow.com/a/30910015
         start.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
