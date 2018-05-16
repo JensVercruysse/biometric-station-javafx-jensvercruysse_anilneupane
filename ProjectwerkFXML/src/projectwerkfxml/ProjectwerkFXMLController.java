@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import mqttbiometricdataservice.IMqttDataHandler;
 import mqttbiometricdataservice.MqttBiometricDataService;
 
-
 /**
  *
  * @author jensv

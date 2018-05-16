@@ -1,6 +1,6 @@
 .default-color0.chart-series-line { -fx-stroke: green; } 
 .default-color0.chart-line-symbol { -fx-background-color: lightgreen, green; }
-.chart-alternative-row-fill {
+.chart-alternative-row-fill{
     -fx-fill: #F0FFF0;
     -fx-stroke: transparent;
     -fx-stroke-width: 0;
