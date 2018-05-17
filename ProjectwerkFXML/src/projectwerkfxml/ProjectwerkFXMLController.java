@@ -135,11 +135,11 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
         System.out.println("Received data on channel " + channel + ": " + data);
 
         if (channel.equals("heartbeat") && checkStarted) {
-            heartbeatDataAsString = data;
+            heartbeatDataAsString = data + " BPM";
             heartbeatDataAsInt = Integer.parseInt(data);
             runHeartbeat();
         } else if (channel.equals("temperature") && checkStarted) {
-            temperatureDataAsString = data;
+            temperatureDataAsString = data + " °C";
             temperatureDataAsDouble = Double.parseDouble(data);
             runTemperature();
         } else if (channel.equals("accelero_x_value") && checkStarted) {
