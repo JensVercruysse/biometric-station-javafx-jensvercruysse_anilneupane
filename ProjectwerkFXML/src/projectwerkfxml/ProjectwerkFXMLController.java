@@ -74,8 +74,12 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
 
     private boolean checkStarted = false;
 
-    private int NumberOfHeartbeatValuesDisplayed[] = new int[10];
-    private double NumberOfTemperatureValuesDisplayed[] = new double[10];
+    private final int NUMBER_OF_HEARTBEAT_VALUES_DISPLAYED = 10;
+    private final int NUMBER_OF_TEMPERATURE_VALUES_DISPLAYED = 20;
+    private final int MIN_HEALTY_HEARTBEAT = 60;
+    private final int MAX_HEALTY_HEARTBEAT = 100;
+    private final int FREEZING_TEMPERATURE_VALUE = 0;
+    private final int EXTREME_HEAT_TEMERATURE_VALUE = 35;
 
     private XYChart.Series createXYSeries(String name) {
         XYChart.Series series = new XYChart.Series();
@@ -155,18 +159,18 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
             @Override
             public void run() {
                 //BPM between 60 and 100 is a healty heartbeat, anything lower of higher will be marked red
-                if (heartbeatDataAsInt > 60 && heartbeatDataAsInt < 100){
+                if (heartbeatDataAsInt > MIN_HEALTY_HEARTBEAT && heartbeatDataAsInt < MAX_HEALTY_HEARTBEAT){
                     heartbeat.setText(heartbeatDataAsString);
                     heartbeat.setStyle("-fx-background-color: transparent;");
                 } else { heartbeat.setStyle("-fx-background-color: red;");
                 heartbeat.setText(heartbeatDataAsString);
             }
 
-                if (heartbeat_x_value > 10) {
+                if (heartbeat_x_value > NUMBER_OF_HEARTBEAT_VALUES_DISPLAYED) {
                     heartbeatValues[0].getData().remove(0);
                 }
                 heartbeatValues[0].getData().add(new XYChart.Data(heartbeat_x_value, heartbeatDataAsInt));
-                xAxisHeartbeat.setLowerBound(heartbeat_x_value - 10);
+                xAxisHeartbeat.setLowerBound(heartbeat_x_value - NUMBER_OF_HEARTBEAT_VALUES_DISPLAYED);
                 xAxisHeartbeat.setUpperBound(heartbeat_x_value);
                 heartbeat_x_value++;
             }
@@ -178,10 +182,10 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
             @Override
             public void run() {
                 //If temperature goes below 0 it's marked blue if temperature goes above 35 it's marked red 
-                if (temperatureDataAsDouble < 0){
+                if (temperatureDataAsDouble < FREEZING_TEMPERATURE_VALUE){
                     temperature.setText(temperatureDataAsString);
                     temperature.setStyle("-fx-background-color: lightblue;");
-                } else if(temperatureDataAsDouble > 35){
+                } else if(temperatureDataAsDouble > EXTREME_HEAT_TEMERATURE_VALUE){
                     temperature.setText(temperatureDataAsString);
                     temperature.setStyle("-fx-background-color: red;");
                 } else {
@@ -190,11 +194,11 @@ public class ProjectwerkFXMLController implements Initializable, IMqttDataHandle
                 }
                 
 
-                if (temperature_x_value > 10) {
+                if (temperature_x_value > NUMBER_OF_TEMPERATURE_VALUES_DISPLAYED) {
                     temperatureValues[0].getData().remove(0);
                 }
                 temperatureValues[0].getData().add(new XYChart.Data(temperature_x_value, temperatureDataAsDouble));
-                xAxisTemperature.setLowerBound(temperature_x_value - 10);
+                xAxisTemperature.setLowerBound(temperature_x_value - NUMBER_OF_TEMPERATURE_VALUES_DISPLAYED);
                 xAxisTemperature.setUpperBound(temperature_x_value);
                 temperature_x_value++;
             }
