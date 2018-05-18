@@ -13,7 +13,7 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <LineChart fx:id="heartbeatChart" layoutX="367.0" layoutY="3.0" prefHeight="269.0" prefWidth="406.0">
+      <LineChart id="heartbeatChart" fx:id="heartbeatChart" layoutX="367.0" layoutY="3.0" prefHeight="269.0" prefWidth="406.0" stylesheets="@../stye_heartbeat.css">
         <xAxis>
           <NumberAxis side="BOTTOM" fx:id="xAxisHeartbeat" />
         </xAxis>
@@ -21,7 +21,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart fx:id="temperatureChart" layoutX="367.0" layoutY="273.0" prefHeight="269.0" prefWidth="406.0">
+      <LineChart id="temperatureChart" fx:id="temperatureChart" layoutX="367.0" layoutY="273.0" prefHeight="269.0" prefWidth="406.0" stylesheets="@../style_temperature.css">
          <xAxis>
             <NumberAxis side="BOTTOM" fx:id="xAxisTemperature" />
          </xAxis>

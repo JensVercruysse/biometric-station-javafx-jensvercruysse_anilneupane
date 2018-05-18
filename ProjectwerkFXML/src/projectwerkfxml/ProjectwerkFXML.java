@@ -22,8 +22,8 @@ public class ProjectwerkFXML extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("ProjectwerkFXML.fxml"));
         
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("style.css");
         
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
